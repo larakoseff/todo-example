@@ -40,8 +40,6 @@ export const addTaskToHtml = (id) => {
     list.appendChild(preview);
 };
 
-
-
 /**
  *
  * @param {string} id 
