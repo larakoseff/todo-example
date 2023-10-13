@@ -23,17 +23,45 @@
 */
 
 
-import { state, Task } from "./modules/state.js";
-import { addTaskToHtml } from "./modules/tasks.js";
+
+// const list = [
+//     createTask({
+//     title: "Wash the Dog",
+//     urgency: "high",
+//     due:null
+// }),
+
+// createTask({
+//     title: "Write code",
+//     urgency: "high",
+//     due: new Date()
+// }),
+
+// createTask({
+//     title: "Do dishes",
+//     urgency: "high",
+//     due: new Date()
+// }),
+
+// createTask({
+//     title: "Learn JavaScript",
+//     urgency: "high",
+//     due: new Date()
+// }),
+
+// ];
+
+// list[1].completed = true;
 
 
+import { createTask } from "./modules/tasks.js"
+import { createAdding } from "./modules/adding.js"
+
+const adding = createAdding()
+
+adding.submission = createTask
 
 
-window.addEventListener('error', () => {
-    document.body.innerHTML = 'Something went very very wrong. Please refresh.';
-});
-
-addTaskToHtml("test")
 
 
 
