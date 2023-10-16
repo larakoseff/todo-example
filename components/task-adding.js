@@ -1,4 +1,3 @@
-// @ts-check
 
 import { getHtml } from "../modules/helpers.js";
 
@@ -78,7 +77,7 @@ template.innerHTML = /* html */ `
   }
 </style>
 
-<dialog class="overlay">
+<dialog class="overlay" data-overlay>
     <h2 class="title">Add Task</h2>
 
     <form data-form id="adding">
@@ -118,88 +117,99 @@ template.innerHTML = /* html */ `
         </dialog>
 `;
 
-customElements.define(
-  "task-adding",
 
-  class extends HTMLElement {
-    #open = false;
+export class TaskAdding extends HTMLElement {
+  #open = false;
 
-    #elements = {
-      /**
-       * @type {undefined | HTMLElement}
-       */
-      form: undefined,
-      /**
-       * @type {undefined | HTMLElement}
-       */
-      cancel: undefined,
-
-      /**
-       * @type {undefined | HTMLElement}
-       */
-      overlay: undefined,
-    };
-    
+  #elements = {
+    /**
+     * @type {undefined | HTMLElement}
+     */
+    form: undefined,
+    /**
+     * @type {undefined | HTMLElement}
+     */
+    cancel: undefined,
 
     /**
-     * @type {ShadowRoot}
+     * @type {undefined | HTMLElement}
      */
-    #inner = this.attachShadow({ mode: "closed" });
+    overlay: undefined,
+  };
+  
 
-    constructor() {
-      super();
-      const { content } = template;
-      this.#inner.appendChild(content.cloneNode(true));
-    }
+  /**
+   * @type {ShadowRoot}
+   */
+  #inner = this.attachShadow({ mode: "closed" });
 
-    connectedCallback() {
-      this.#elements = {
-        form: getHtml({ dataAttr: "form", target: this.#inner }),
-        cancel: getHtml({ dataAttr: "cancel", target: this.#inner }),
-        overlay: getHtml({ dataAttr: "overlay", target: this.#inner }),
-      };
+  constructor() {
+    super();
+    const { content } = template;
+    this.#inner.appendChild(content.cloneNode(true));
+  }
 
-      this.open = this.getAttribute('open') !== null
+  connectedCallback() {
+    this.#elements = {
+      form: getHtml({ dataAttr: "form", target: this.#inner }),
+      cancel: getHtml({ dataAttr: "cancel", target: this.#inner }),
+      overlay: getHtml({ dataAttr: "overlay", target: this.#inner }),
+    };
+
+    this.open = this.getAttribute('open') !== null
 
 
-      this.#elements.cancel.addEventListener("click", () => {
-        this.open = false;
-      });
+    this.#elements.cancel.addEventListener("click", () => {
+      this.open = false;
+    });
 
-      this.#elements.form.addEventListener("submit", (event) => {
-        event.preventDefault();
+    this.#elements.form.addEventListener("submit", (event) => {
+      event.preventDefault();
 
-        if (!(event.target instanceof HTMLFormElement)) {
-          throw new Error("form not found");
-        }
-
-        const entries = new FormData(event.target);
-        const response = Object.fromEntries(entries);
-
-        console.log(response);
-
-        event.target.reset();
-        this.open = false;
-      });
-    }
-
-    set open(newValue) {
-      if (newValue === this.#open) return;
-      this.#open = newValue;
-
-      if (!(this.#elements.overlay instanceof HTMLDialogElement)) {
-        throw new Error("Dialog element required");
+      if (!(event.target instanceof HTMLFormElement)) {
+        throw new Error("form not found");
       }
 
-      if (newValue) {
-        this.#elements.overlay.showModal();
-      } else {
-        this.#elements.overlay.close();
-      }
+      const entries = new FormData(event.target);
+      const response = Object.fromEntries(entries);
+
+      const added = new CustomEvent("added", {
+        bubbles: true,
+        detail: response,
+      })
+
+      this.dispatchEvent(added)
+
+      event.target.reset();
+      this.open = false;
+    });
+  }
+
+/**
+ * Whether the overlay modal is shown or not
+ */
+  set open(newValue) {
+    if (newValue === this.#open) return;
+    this.#open = newValue;
+
+    if (!(this.#elements.overlay instanceof HTMLDialogElement)) {
+      throw new Error("Dialog element required");
     }
 
-    get open() {
-      return this.#open;
+    if (newValue) {
+      this.#elements.overlay.showModal();
+    } else {
+      this.#elements.overlay.close();
     }
   }
-);
+
+  get open() {
+    return this.#open;
+  }
+}
+
+customElements.define("task-adding", TaskAdding);
+
+
+export default TaskAdding
+
