@@ -7,7 +7,7 @@
  * @param {object} props
  * @param {string} props.dataAttr
  * @param {string} [props.value]
- * @param {HTMLElement} [props.target]
+ * @param {HTMLElement | ShadowRoot} [props.target]
  * @returns {HTMLElement}
  */
 export const getHtml = (props) => {
