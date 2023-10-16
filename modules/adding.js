@@ -35,40 +35,7 @@ const createAddingHtml = () => {
     dialog.className = "overlay";
 
     dialog.innerHTML = /* html */ `
-    <h2 class="overlay__title">Add Task</h2>
-
-    <form data-form id="adding">
-      <label class="overlay__field">
-        <div>Title</div>
-        <input required class="overlay__input" name="title"  />
-      </label>
-
-      <label class="overlay__field">
-        <div>Due</div>
-        <input type="date" class="overlay__input" name="due"  />
-      </label>
-
-        <label class="overlay__field">
-          <div>Urgency</div>
-          <select required class="overlay__input" 
-          name="urgency"  />
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-              <option value="low">Low</option>
-          </select>
-        </label>
-    </form>
-
-    <div class="overlay__row">
-      <button class="button" data-cancel>Cancel</button>
-
-      <button 
-        class="button" 
-        type="submit"
-        form="adding"
-      >Save</button>
-    </div>
-        </dialog>
+    
         `
         element.appendChild(dialog)
 
