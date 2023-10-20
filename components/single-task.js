@@ -1,7 +1,6 @@
+import { getHtml } from "../modules/helpers.js";
 
-import { getHtml } from "../modules/helpers.js"
-
-const template = document.createElement('template')
+const template = document.createElement("template");
 
 template.innerHTML = /* html */ `
 <style>
@@ -82,67 +81,62 @@ template.innerHTML = /* html */ `
     </svg>
 </button>
 </li>
-`
+`;
 
 customElements.define(
-    'single-task', 
-    
-    class extends HTMLElement {
-        /**
-         * @type {string}
-         */
-        #title = this.getAttribute("title")
-       
-        /**
-         * @type {boolean}
-         */
-        #completed = this.getAttribute("completed") !== null
+  "single-task",
 
-        #elements = {
-            /**
-             * @type {undefined | HTMLElement}
-             */
-            check: undefined,
-            /**
-             * @type {undefined | HTMLElement}
-             */
-            title: undefined,
-             /**
-             * @type {undefined | HTMLElement}
-             */
-            remove: undefined
-        }
-/**
- * @type {ShadowRoot}
- */
-        #inner = this.attachShadow({ mode: "closed" })
+  class extends HTMLElement {
+    /**
+     * @type {string}
+     */
+    #title = this.getAttribute("title");
+
+    /**
+     * @type {boolean}
+     */
+    #completed = this.getAttribute("completed") !== null;
+
+    #elements = {
+      /**
+       * @type {undefined | HTMLElement}
+       */
+      check: undefined,
+      /**
+       * @type {undefined | HTMLElement}
+       */
+      title: undefined,
+      /**
+       * @type {undefined | HTMLElement}
+       */
+      remove: undefined,
+    };
     
+    /**
+     * @type {ShadowRoot}
+     */
+    #inner = this.attachShadow({ mode: "closed" });
+
     constructor() {
-        super()
-        const { content } = template
-        this.#inner.appendChild(content.cloneNode(true))
+      super();
+      const { content } = template;
+      this.#inner.appendChild(content.cloneNode(true));
     }
 
     connectedCallback() {
-        this.#elements = {
-            check: getHtml( { dataAttr: 'check', target: this.#inner }),
-            remove: getHtml( { dataAttr: 'remove', target: this.#inner }),
-            title: getHtml( { dataAttr: 'title', target: this.#inner }),
-        };
+      this.#elements = {
+        check: getHtml({ dataAttr: "check", target: this.#inner }),
+        remove: getHtml({ dataAttr: "remove", target: this.#inner }),
+        title: getHtml({ dataAttr: "title", target: this.#inner }),
+      };
 
-    this.#elements.title.innerText = this.#title;
+      this.#elements.title.innerText = this.#title;
 
-    if (!(this.#elements.check instanceof HTMLInputElement)) {
+      if (!(this.#elements.check instanceof HTMLInputElement)) {
         throw new Error("Required to be input element");
+      }
+
+      this.#elements.check.checked = this.#completed;
     }
-
-    this.#elements.check.checked = this.#completed
-    }
- }
- )
-
-
-
-
-
-
+  }
+);

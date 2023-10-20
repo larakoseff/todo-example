@@ -1,3 +1,12 @@
+:root {
+  --color-primary-100: rgba(51, 81, 71, 1);
+  --color-primary-75: rgba(51, 81, 71, 0.75);
+  --color-primary-50: rgba(51, 81, 71, 0.5);
+  --color-primary-25: rgba(51, 81, 71, 0.25);
+}
+
+
+
 * {
   box-sizing: border-box;
 }
@@ -9,15 +18,6 @@ body {
   padding: 1rem;
 }
 
-.button {
-  height: 3rem;
-  padding: 0 3rem;
-  background: black;
-  color: white;
-  border-radius: 8px;
-  border-width: 0;
-  cursor: pointer;
-}
 
 .app {
   max-width: 40rem;

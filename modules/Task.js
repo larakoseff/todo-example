@@ -1,5 +1,3 @@
-
-
 /**
  * @typedef {'high' | 'medium' | 'low'} Urgency - The priority that the tasks
  * should take in terms of how quickly it should be completed
@@ -11,11 +9,8 @@
  * no due date it will be placed last).
  */
 
-
-
 import { doesHtmlExist, getHtml, createUniqueId } from "./helpers.js";
 // eslint-disable-next-line no-unused-vars
-
 
 /**
  *
@@ -92,39 +87,44 @@ const updateHtmlTask = (id, changes) => {
 /**
  @returns {Task}
  */
-export class Task  {
-    /**
-     * @type {string}
-     */
-#id = createUniqueId();
-    /**
-     * @type {boolean}
-     */
-#completed = false
-    /**
-     * @type {Date}
-     */
-#created = new Date()
-    /**
-     * @type {string}
-     */
-#title = undefined
-    /**
-     * @type {string}
-     */
-#urgency = undefined
-    /**
-     * @type {Date}
-     */
-#due = undefined
+export class Task {
+  /**
+   * @type {string}
+   */
+  #id = createUniqueId();
+  /**
+   * @type {boolean}
+   */
 
-/**
- * @param {Omit<Props, 'completed'>} props 
- */
-constructor(props) {
-    this.#due = props.due
-    this.#urgency = props.urgency
-    this.#due = props.due
+  #completed = false;
+  /**
+   * @type {Date}
+   */
+
+  #created = new Date();
+
+  /**
+   * @type {string}
+   */
+  #title = undefined;
+
+  /**
+   * @type {string}
+   */
+  #urgency = undefined;
+  
+  /**
+   * @type {Date}
+   */
+  #due = undefined;
+
+  /**
+   * @param {Omit<Props, 'completed'>} props
+   */
+  constructor(props) {
+    this.#due = props.due;
+    this.#urgency = props.urgency;
+    this.#due = props.due;
 
     addTaskToHtml(this.id);
 
@@ -132,86 +132,84 @@ constructor(props) {
       completed: this.completed,
       ...props,
     });
+  }
+
+  get id() {
+    return this.#id;
+  }
+
+  set id(newValue) {
+    throw new Error("Cannot directly change ID");
+  }
+
+  get completed() {
+    return this.#completed;
+  }
+
+  set completed(newValue) {
+    if (typeof newValue !== "boolean")
+      throw new Error('"completed" is not a boolean');
+
+    if (newValue === this.#completed) return;
+    this.#completed = newValue;
+
+    updateHtmlTask(this.#id, {
+      completed: newValue,
+    });
+  }
+
+  get created() {
+    return this.#created;
+  }
+
+  set created(newValue) {
+    throw new Error("Cannot directly change created");
+  }
+
+  get title() {
+    return this.#title;
+  }
+
+  set title(newValue) {
+    if (!newValue || typeof newValue !== "string" || newValue.trim() === "") {
+      throw new Error('"title" is required to be a non-empty string');
+    }
+
+    this.#title = newValue;
+
+    updateHtmlTask(this.#id, {
+      title: newValue,
+    });
+  }
+
+  get urgency() {
+    return this.#urgency;
+  }
+
+  set urgency(newValue) {
+    /**
+     * @type {Array<Urgency>}
+     */
+    const valid = ["high", "low", "medium"];
+
+    if (!valid.includes(newValue)) {
+      throw new Error("Valid is required to be high, low or medium");
+    }
+
+    this.#urgency = newValue;
+  }
+
+  get due() {
+    return this.#due;
+  }
+
+  set due(newValue) {
+    if (!(newValue instanceof Date)) {
+      throw new Error("due is required to be a date");
+    }
+
+    this.#due = newValue;
+  }
 }
-
-    get id() {
-      return this.#id;
-    }
-
-    set id(newValue) {
-      throw new Error("Cannot directly change ID");
-    }
-
-    get completed() {
-      return this.#completed;
-    }
-
-    set completed(newValue) {
-      if (typeof newValue !== "boolean")
-        throw new Error('"completed" is not a boolean');
-     
-        if (newValue === this.#completed) return;
-      this.#completed = newValue;
-
-      updateHtmlTask(this.#id, {
-        completed: newValue,
-      });
-    }
-
-    get created() {
-      return this.#created;
-    }
-
-    set created(newValue) {
-      throw new Error("Cannot directly change created");
-    }
-
-    get title() {
-        return this.#title;
-    }
-
-    set title(newValue) {
-        if (!newValue || typeof newValue !== 'string'|| newValue.trim() === "") {
-            throw new Error('"title" is required to be a non-empty string')
-        }
-
-        this.#title = newValue;
-
-        updateHtmlTask(this.#id, {
-            title: newValue,
-          });
-    }
-
-    get urgency() {
-        return this.#urgency
-    }
-
-    set urgency(newValue) {
-        /**
-         * @type {Array<Urgency>}
-         */
-        const valid = ['high', 'low', 'medium']
-
-        if (!valid.includes(newValue)) {
-            throw new Error('Valid is required to be high, low or medium')
-        }
-
-        this.#urgency = newValue
-    }
-
-    get due() {
-        return this.#due
-    }
-
-    set due(newValue) {
-        if (!(newValue instanceof Date)) {
-            throw new Error("due is required to be a date")
-        }
-
-        this.#due = newValue
-    }
-
-  };
-
 
 export default Task;

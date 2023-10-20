@@ -1,6 +1,7 @@
 
 import { getHtml } from "./modules/helpers.js";
 import "./components/single-task.js"
+import "./components/user-action.js"
 import { TaskAdding } from "./components/task-adding.js"
 // import { Task } from "./modules/Task.js";
 // import { createAdding } from "./modules/adding.js";
@@ -25,10 +26,6 @@ taskAdding.addEventListener("added", (event) => {
     if (!(event instanceof CustomEvent)) {
     throw new Error("Required to be custom event")
     }
-
-console.log(event.detail)
-
-    console.log(event)
 })
 
 window.addEventListener("error", () => {
